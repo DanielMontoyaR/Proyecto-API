@@ -18,6 +18,8 @@
         public Inventario inventario_Sucursal { get; set; } = new Inventario(); //Conexión con la entidad Inventario
 
         public List<TelefonoSucursal> telefonos_List { get; set; } = new List<TelefonoSucursal>();
+        public Servicio servicios = new Servicio(); //Conexión de sucursal con servicio
+
 
     }
 }
