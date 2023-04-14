@@ -2,7 +2,7 @@
 {
     public class TelefonoSucursal
     {
-        public List<string> Telefonos { get; set; } = new List<string>();
+        public string Telefono { get; set; } = string.Empty;
 
     }
 }

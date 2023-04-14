@@ -13,8 +13,8 @@
         public string Apellido1 { get; set; } = string.Empty;
         public string Apellido2 { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public DateTime Fecha_Nacimiento { get; set; } = DateTime.Now;
-        public Leccion lecciones_que_asiste { get; set; } = new Leccion();
+        public string Fecha_Nacimiento { get; set; } = string.Empty;
+        public List<Leccion> lecciones_que_asiste { get; set; } = new List<Leccion>();
         //public string Dia { get; set; } = string.Empty;
         //public string Mes { get; set; } = string.Empty;
         //public string Año { get; set; } = string.Empty;

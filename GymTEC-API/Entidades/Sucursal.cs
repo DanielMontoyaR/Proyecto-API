@@ -10,15 +10,12 @@
         public int capacidad_Max { get; set; } = 0;
         public string fecha_Apertura { get; set; }= string.Empty;
         public string horario_Atencion { get; set; } = string.Empty;
-
-
-        public Empleado empleado_Admin { get; set; } = new Empleado(); //Conexión con la entidad Empleado
+        //public Empleado empleado_Admin { get; set; } = new Empleado(); //Conexión con la entidad Empleado
         public Spa spa_Sucursal { get; set; } = new Spa(); //Conexión con la entidad Spa
         public Tienda tienda_Sucursal { get; set; } = new Tienda(); //Conexión con la entidad Tienda
         public Inventario inventario_Sucursal { get; set; } = new Inventario(); //Conexión con la entidad Inventario
-
         public List<TelefonoSucursal> telefonos_List { get; set; } = new List<TelefonoSucursal>();
-        public Servicio servicios = new Servicio(); //Conexión de sucursal con servicio
+        public List<Servicio> servicios = new List<Servicio>(); //Conexión de sucursal con servicio
 
 
     }
