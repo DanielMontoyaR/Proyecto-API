@@ -3,6 +3,7 @@
     public class Lesson
     {
         public string ID_Lessons { get; set; } = string.Empty;
+        public string Branch_Name { get; set; } = string.Empty;
         public int Quotas { get; set; } = 0; //Cupos para el curso
         public string Type { get; set; } = string.Empty;
         public DateTime Start_Date { get; set; }

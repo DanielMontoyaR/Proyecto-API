@@ -62,7 +62,12 @@ namespace GymTEC_API.Controllers
 
             Branch branch_L = new Branch();
 
-            Spa spaLink = new Spa(); 
+            Spa spa_Link = new Spa(); 
+            Shop shop_Link = new Shop();   
+            BranchPhone phone_Link = new BranchPhone();
+            Lesson lesson_Link = new Lesson();
+            Inventory inventory_Link = new Inventory();
+            Employee employee_Link = new Employee();
 
 
 
@@ -76,10 +81,17 @@ namespace GymTEC_API.Controllers
 
             if (!branch_data.Name.Trim().Equals(string.Empty)) {
                 branch_L = branch_data;
-                spaLink.Branch_Name = branch_data.Name;
+
+                spa_Link.Branch_Name        = branch_data.Name;
+                shop_Link.Branch_Name       = branch_data.Name;
+                phone_Link.Branch_Name      = branch_data.Name;
+                lesson_Link.Branch_Name     = branch_data.Name;
+                employee_Link.Branch_Name   = branch_data.Name;
+                inventory_Link.Branch_Name  = branch_data.Name;
+
                 json.status = "Ok";
                 json.result = branch_L;
-                json.result = spaLink;
+                json.result = spa_Link;
                 return Ok(json);
             }
 

@@ -4,7 +4,8 @@
     {
 
         public string Employee_ID { get; set; } = string.Empty; //Atributo llave de la entidad Empleado
-        
+
+        public string Branch_Name { get; set; } = string.Empty;
         public string Employee_Province { get; set; } = string.Empty;
         public string Employee_District { get; set; } = string.Empty;
         public string Employee_Canton { get; set; } = string.Empty;
