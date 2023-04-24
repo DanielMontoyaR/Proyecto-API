@@ -10,7 +10,7 @@
         public int max_Size { get; set; } = 0;
         public string opening_Date { get; set; }= string.Empty;
         public string schedule_Attention { get; set; } = string.Empty;
-        //public Empleado empleado_Admin { get; set; } = new Empleado(); //Conexión con la entidad Empleado
+        //public char empleado_Admin { get; set; } //Conexión con la entidad Empleado
         /*
         public Spa spa_Branch { get; set; } = new Spa(); //Conexión con la entidad Spa
         public Shop shop_Branch { get; set; } = new Shop(); //Conexión con la entidad Tienda

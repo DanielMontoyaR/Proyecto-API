@@ -1,4 +1,5 @@
 ﻿using GymTEC_API.Entidades;
+using GymTEC_API.Resources;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymTEC_API.Controllers
@@ -98,5 +99,31 @@ namespace GymTEC_API.Controllers
 
             return json;
         }
-    }
+
+        [HttpDelete("delete_branch")]
+        public async Task<ActionResult<JSON_Object>> DeleteBranch([FromQuery] Branch branch_data)
+        {
+            JSON_Object json = new JSON_Object("error", null); //Se inicializa con error y null para ver si hay algun error.
+            List<Branch> branch_info = new List<Branch>();
+ 
+            bool var = DBData.
+            Console.WriteLine(var);
+            if (var)
+            {
+                return Ok(json);
+            }
+            else
+            {
+                json.status = "error";
+                return BadRequest(json);
+            }
+
+            
+
+
+            json.result = listBranches;
+            return json;
+        }
+
+        }
 }
