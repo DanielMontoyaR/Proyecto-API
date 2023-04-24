@@ -2,8 +2,14 @@
 {
     public class Spa
     {
-        public bool Status { get; set; } = false;
 
-        public Tratamiento tratamiento_Spa { get; set; } = new Tratamiento();
+        public string Branch_Name { get; set; } = string.Empty;
+
+        public char Status { get; set; }
+
+        public Treatment Spa_Treatment { get; set; } = new Treatment();
+
+
+
     }
 }

@@ -4,9 +4,7 @@ namespace GymTEC_API.Controllers
 {
     [ApiController]
     [Route("api")]
-    public class EquipoController : ControllerBase
+    public class PaymentController:ControllerBase
     {
-
-
     }
 }

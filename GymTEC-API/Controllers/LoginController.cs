@@ -10,17 +10,17 @@ namespace GymTEC_API.Controllers
     public class LoginController : ControllerBase
     {
         [HttpGet("auth_employee")]
-        public async Task<ActionResult<JSON_Object>> AuthEmployee([FromQuery] Credenciales employee_credentials)
+        public async Task<ActionResult<JSON_Object>> AuthEmployee([FromQuery] Credentials employee_credentials)
         {
             JSON_Object json = new JSON_Object("error", null); //Se inicializa con error y null para ver si hay algun error.
-            Empleado informacion_empleado = new Empleado();
-            informacion_empleado.Cedula_Empleado = "123";
-            informacion_empleado.Contraseña = "123";
+            Employee informacion_empleado = new Employee();
+            informacion_empleado.Employee_ID = "123";
+            informacion_empleado.Employee_Password = "123";
 
-            if (employee_credentials.Cedula == informacion_empleado.Cedula_Empleado && employee_credentials.Password == informacion_empleado.Contraseña) {
-                informacion_empleado.P_Nombre = "Max";
-                informacion_empleado.Apellido1 = "G";
-                informacion_empleado.Apellido2 = "M";
+            if (employee_credentials.ID_Credentials == informacion_empleado.Employee_ID && employee_credentials.Password == informacion_empleado.Employee_Password) {
+                informacion_empleado.Employee_Fname = "Max";
+                informacion_empleado.Employee_LName1 = "G";
+                informacion_empleado.Employee_LName2 = "M";
                 json.status = "ok";
                 json.result = informacion_empleado;
                 return Ok(json);
@@ -29,18 +29,18 @@ namespace GymTEC_API.Controllers
 
         }
         [HttpGet("auth_cliente")]
-        public async Task<ActionResult<JSON_Object>> AuthCliente([FromQuery] Credenciales client_credentials)
+        public async Task<ActionResult<JSON_Object>> AuthCliente([FromQuery] Credentials client_credentials)
         {
             JSON_Object json = new JSON_Object("error", null); //Se inicializa con error y null para ver si hay algun error.
-            Cliente informacion_cliente = new Cliente();
-            informacion_cliente.Cedula_cliente = "123";
+            Client informacion_cliente = new Client();
+            informacion_cliente.ID_Client = "123";
             informacion_cliente.Password = "123";
 
-            if (client_credentials.Cedula == informacion_cliente.Cedula_cliente && client_credentials.Password == informacion_cliente.Password)
+            if (client_credentials.ID_Credentials == informacion_cliente.ID_Client && client_credentials.Password == informacion_cliente.Password)
             {
-                informacion_cliente.Nombre = "Daniel";
-                informacion_cliente.Apellido1 = "M";
-                informacion_cliente.Apellido2 = "R";
+                informacion_cliente.Name = "Daniel";
+                informacion_cliente.Last_name1 = "M";
+                informacion_cliente.Last_name2 = "R";
                 json.status = "ok";
                 json.result = informacion_cliente;
                 return Ok(json);
