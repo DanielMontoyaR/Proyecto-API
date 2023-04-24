@@ -17,6 +17,7 @@
         public Inventory inventory_Branch { get; set; } = new Inventory(); //Conexión con la entidad Inventario
         public List<BranchPhone> phone_List { get; set; } = new List<BranchPhone>();
         public List<Service> services = new List<Service>(); //Conexión de sucursal con servicio
+
         */
     }
 }
