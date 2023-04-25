@@ -9,28 +9,59 @@ namespace GymTEC_API.Resources
 {
     public class DBData
     {
-        public static string cadenaConexion = "Data Source=LAPTOP-85GS8ERK;Initial Catalog=GymTec;Persist Security Info=True;User ID=maxgm;Password=123";//This 
+        public static string cadenaConexion = "Data Source=DESKTOP-50TLTT3\\SQLEXPRESS;Initial Catalog=GymTec;User ID=Daniel;Password=123.";//This 
         //Metodo que llama a un stored procedure en SQL para insertar un nuevo branch
+
+
+        public static DataTable GetAllBranches() { 
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try { 
+                connection.Open();
+                SqlCommand cmd = new SqlCommand("SELECT branch_name FROM Branch", connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+
         public static bool ExecuteAddBranch(Branch json)
         {
-            SqlConnection conn = new SqlConnection(cadenaConexion);
+            SqlConnection connection = new SqlConnection(cadenaConexion);
 
 
             try
             {
-                conn.Open();
+                connection.Open();
                 //llamada al stored procedure 
-                SqlCommand cmd = new SqlCommand("ADD ", conn);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
+                SqlCommand cmd = new SqlCommand("INSERT INTO Branch(province,district,canton,branch_name,max_capacity,openDate,branch_schedule)" +
+                                                "VALUES (@province, @district, @canton, @branch_name, @max_capacity, @openDate, @branch_schedule)", connection);
+                cmd.CommandType = System.Data.CommandType.Text;
                 //Parametros que recibe el stored procedure
-                cmd.Parameters.AddWithValue("@Province", SqlDbType.NVarChar).Value = json.Province;
-                cmd.Parameters.AddWithValue("@District", SqlDbType.NVarChar).Value = json.District;
-                cmd.Parameters.AddWithValue("@Canton", SqlDbType.NVarChar).Value = json.Canton;
-                cmd.Parameters.AddWithValue("@max_Size", SqlDbType.NVarChar).Value = json.max_Size;
-                cmd.Parameters.AddWithValue("@opening_Date", SqlDbType.NVarChar).Value = json.opening_Date;
-                cmd.Parameters.AddWithValue("@schedule_Attention", SqlDbType.NVarChar).Value = json.schedule_Attention;
-                cmd.Parameters.AddWithValue("@Name", SqlDbType.NVarChar).Value = json.Name;
+                cmd.Parameters.AddWithValue("@province", SqlDbType.NVarChar).Value = json.Province;
+                cmd.Parameters.AddWithValue("@district", SqlDbType.NVarChar).Value = json.District;
+                cmd.Parameters.AddWithValue("@canton", SqlDbType.NVarChar).Value = json.Canton;
+                cmd.Parameters.AddWithValue("@branch_name", SqlDbType.NVarChar).Value = json.Name;
+                cmd.Parameters.AddWithValue("@max_capacity", SqlDbType.Int).Value = json.max_Size;
+                cmd.Parameters.AddWithValue("@openDate", SqlDbType.NVarChar).Value = json.opening_Date;
+                cmd.Parameters.AddWithValue("@branch_schedule", SqlDbType.NVarChar).Value = json.schedule_Attention;
+                
+
                 int i = cmd.ExecuteNonQuery();
                 //ExecuteAddPatientPhone(json);
 
@@ -56,7 +87,7 @@ namespace GymTEC_API.Resources
             }
             finally
             {
-                conn.Close();
+                connection.Close();
             }
         }
 

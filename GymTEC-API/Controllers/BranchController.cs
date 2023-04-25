@@ -1,36 +1,40 @@
 ﻿using GymTEC_API.Entidades;
 using GymTEC_API.Resources;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace GymTEC_API.Controllers
 {
+
     [ApiController]
     [Route("api")]
     public class BranchController:ControllerBase
     {
+
+
         [HttpGet("all_branches")]
         public async Task<ActionResult<JSON_Object>> AllBranches() { //Function for obtaining all branch names.
-            JSON_Object json = new JSON_Object("error", null); //Se inicializa con error y null para ver si hay algun error.
+
+ 
+
+
+            DataTable allBranch = DBData.GetAllBranches();
 
             List<Branch> branch_L = new List<Branch>();
+            Branch branch = new Branch();
+            foreach (DataRow row in allBranch.Rows)
+            {
+                
+                branch.Name = row["branch_name"].ToString();
 
-            branch_L.Add(new Branch { Name = "Cartago"});
-            branch_L.Add(new Branch { Name = "Heredia" });
-            branch_L.Add(new Branch { Name = "Chepe" });
-            branch_L.Add(new Branch { Name = "Alajuela" });
-            branch_L.Add(new Branch { Name = "Puntarenas" });
-            branch_L.Add(new Branch { Name = "Taras" });
+                branch_L.Add(branch);
 
-            json.status = "ok";
-            //json.result = branch_L.;
-            List<String> listNames = new List<String>();
-
-            foreach (var Branchnames in branch_L) {
-                listNames.Add(Branchnames.Name); ;
             }
 
-            json.result = listNames;
+            JSON_Object json = new JSON_Object("ok", branch_L);
             return Ok(json);
+
+
         }
 
         [HttpGet("obt_branch")]
@@ -99,7 +103,7 @@ namespace GymTEC_API.Controllers
 
             return json;
         }
-
+        /*
         [HttpDelete("delete_branch")]
         public async Task<ActionResult<JSON_Object>> DeleteBranch([FromQuery] Branch branch_data)
         {
@@ -123,7 +127,7 @@ namespace GymTEC_API.Controllers
 
             json.result = listBranches;
             return json;
-        }
+        }*/
 
         }
 }
