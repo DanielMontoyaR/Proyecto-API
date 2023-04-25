@@ -9,7 +9,7 @@ namespace GymTEC_API.Resources
 {
     public class DBData
     {
-        public static string cadenaConexion = "Data Source=DESKTOP-50TLTT3\\SQLEXPRESS;Initial Catalog=GymTec;User ID=Daniel;Password=123.";//This 
+        public static string cadenaConexion = "Data Source=LAPTOP-85GS8ERK;Initial Catalog=GymTec;Persist Security Info=True;User ID=maxgm;Password=123";//This 
         //Metodo que llama a un stored procedure en SQL para insertar un nuevo branch
 
 
@@ -47,7 +47,8 @@ namespace GymTEC_API.Resources
             try
             {
                 connection.Open();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Branch WHERE branch_name=" + nombreBranch, connection);
+                string query = string.Format("SELECT * FROM Branch WHERE branch_name= '{0}'", nombreBranch);
+                SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.CommandType = System.Data.CommandType.Text;
 
                 DataTable dataTable = new DataTable();
@@ -80,35 +81,17 @@ namespace GymTEC_API.Resources
             {
                 connection.Open();
                 //llamada al stored procedure 
-                SqlCommand cmd = new SqlCommand("INSERT INTO Branch(province,district,canton,branch_name,max_capacity,openDate,branch_schedule)" +
-                                                "VALUES (@province, @district, @canton, @branch_name, @max_capacity, @openDate, @branch_schedule)", connection);
+                string query = string.Format("INSERT INTO Branch(province,district,canton,branch_name,max_capacity,openDate,branch_schedule)" +
+                                                "VALUES ('{0}', '{1}', '{2}', '{3}', {4}, '{5}', '{6}')", json.Province, json.District, json.Canton, json.Name, json.max_Size, json.opening_Date, json.schedule_Attention);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.CommandType = System.Data.CommandType.Text;
-                //Parametros que recibe el stored procedure
-                cmd.Parameters.AddWithValue("@province", SqlDbType.NVarChar).Value = json.Province;
-                cmd.Parameters.AddWithValue("@district", SqlDbType.NVarChar).Value = json.District;
-                cmd.Parameters.AddWithValue("@canton", SqlDbType.NVarChar).Value = json.Canton;
-                cmd.Parameters.AddWithValue("@branch_name", SqlDbType.NVarChar).Value = json.Name;
-                cmd.Parameters.AddWithValue("@max_capacity", SqlDbType.Int).Value = json.max_Size;
-                cmd.Parameters.AddWithValue("@openDate", SqlDbType.NVarChar).Value = json.opening_Date;
-                cmd.Parameters.AddWithValue("@branch_schedule", SqlDbType.NVarChar).Value = json.schedule_Attention;
+                
                 
 
                 int i = cmd.ExecuteNonQuery();
-                //ExecuteAddPatientPhone(json);
-
-                /**
-                foreach (string phone in json.telefono)
-                {
-                    ExecuteAddPatientPhone(cedula, phone);
-                }
-                **/
-                /**
-                foreach(Direccion direccion in json.direccion)
-                {
-                    ExecuteAddPatientAddress(cedula,direccion.provincia, direccion.canton, direccion.distrito);
-                }
-                **/
-                return (i > 0) ? false : true;
+                
+                return (i > 0) ? true: false;
 
             }
             catch (Exception ex)
@@ -122,7 +105,74 @@ namespace GymTEC_API.Resources
             }
         }
 
-            public static DataSet ListarTablas(string nombreProcedimiento, List<Parameter> parameters = null)
+        public static bool ExecuteDeleteBranch(Branch_IDENT json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+                string query = string.Format("DELETE FROM Branch " +
+                                                "WHERE branch_name = '{0}'", json.Name);
+
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public static bool ExecuteModBranch(Branch json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+                //llamada al stored procedure 
+                string query = string.Format("UPDATE Branch " +
+                    "SET province = '{0}', district = '{1}', canton = '{2}', branch_name = '{3}', max_capacity = {4}, openDate = '{5}', branch_schedule = '{6}' " +
+                                              "WHERE branch_name = '{3}'", json.Province, json.District, json.Canton, json.Name, json.max_Size, json.opening_Date, json.schedule_Attention);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public static DataSet ListarTablas(string nombreProcedimiento, List<Parameter> parameters = null)
         {
             SqlConnection conexion = new SqlConnection(cadenaConexion);
 
