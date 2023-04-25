@@ -40,6 +40,37 @@ namespace GymTEC_API.Resources
 
         }
 
+        public static DataTable GetBranch(String nombreBranch)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Branch WHERE branch_name=" + nombreBranch, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+
+
+
         public static bool ExecuteAddBranch(Branch json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);

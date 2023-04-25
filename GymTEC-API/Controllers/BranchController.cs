@@ -15,16 +15,14 @@ namespace GymTEC_API.Controllers
         [HttpGet("all_branches")]
         public async Task<ActionResult<JSON_Object>> AllBranches() { //Function for obtaining all branch names.
 
- 
-
 
             DataTable allBranch = DBData.GetAllBranches();
 
             List<String> branch_L = new List<String>();
-            Branch branch = new Branch();
+            
             foreach (DataRow row in allBranch.Rows)
             {
-                
+                Branch branch = new Branch();
                 branch.Name = row["branch_name"].ToString();
 
                 branch_L.Add(branch.Name);
@@ -40,23 +38,52 @@ namespace GymTEC_API.Controllers
         [HttpGet("obt_branch")]
         public async Task<ActionResult<JSON_Object>> ObtainBranch([FromQuery] Branch branch_name)
         { //Function for obtaining  branch info.
-            JSON_Object json = new JSON_Object("error", null); //Se inicializa con error y null para ver si hay algun error.
+            /*
+             
 
-            Branch branch_info = new Branch();
+             Branch branch_info = new Branch();
 
-            branch_info.Name = "Cartago";
-            branch_info.Canton = "Central";
-            branch_info.District = "San Nicolás";
-            branch_info.opening_Date = "Monday to Sunday";
-            branch_info.schedule_Attention = "7:00 / 19:00";
+             branch_info.Name = "Cartago";
+             branch_info.Canton = "Central";
+             branch_info.District = "San Nicolás";
+             branch_info.opening_Date = "Monday to Sunday";
+             branch_info.schedule_Attention = "7:00 / 19:00";
 
-            if(branch_name.Name == branch_info.Name)
-            {
-                json.status = "ok";
-                json.result = branch_info;
+             if(branch_name.Name == branch_info.Name)
+             {
+                 json.status = "ok";
+                 json.result = branch_info;
+                 return Ok(json);
+             }
+             return json;*/
+
+            DataTable allBranch = DBData.GetBranch(branch_name.Name);
+
+            List<Branch> branch_L = new List<Branch>();
+
+
+            if (allBranch != null) {
+                foreach (DataRow row in allBranch.Rows)
+                {
+                    Branch branch = new Branch();
+                    branch.Province = row["province"].ToString();
+                    branch.District = row["district"].ToString();
+                    branch.Canton = row["canton"].ToString();
+                    branch.Name = row["branch_name"].ToString();
+                    branch.max_Size = (int)row["max_capacity"];
+                    branch.opening_Date = row["openDate"].ToString();
+                    branch.schedule_Attention = row["branch_schedule"].ToString();
+
+                    branch_L.Add(branch);
+
+                }
+
+                JSON_Object json = new JSON_Object("ok", branch_L);
                 return Ok(json);
-            }
-            return json;
+            }else { return BadRequest(); }
+
+
+
 
         }
 
