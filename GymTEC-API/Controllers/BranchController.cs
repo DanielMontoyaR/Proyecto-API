@@ -20,14 +20,14 @@ namespace GymTEC_API.Controllers
 
             DataTable allBranch = DBData.GetAllBranches();
 
-            List<Branch> branch_L = new List<Branch>();
+            List<String> branch_L = new List<String>();
             Branch branch = new Branch();
             foreach (DataRow row in allBranch.Rows)
             {
                 
                 branch.Name = row["branch_name"].ToString();
 
-                branch_L.Add(branch);
+                branch_L.Add(branch.Name);
 
             }
 
