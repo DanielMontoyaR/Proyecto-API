@@ -9,10 +9,12 @@ namespace GymTEC_API.Resources
 {
     public class DBData
     {
-        public static string cadenaConexion = "Data Source=LAPTOP-85GS8ERK;Initial Catalog=GymTec;Persist Security Info=True;User ID=maxgm;Password=123";//This 
+        public static string cadenaConexion = "Data Source=DESKTOP-50TLTT3\\SQLEXPRESS;Initial Catalog=GymTec;User ID=Daniel;Password=123.";//This 
         //Metodo que llama a un stored procedure en SQL para insertar un nuevo branch
 
 
+
+        //Start Branch Functions
         public static DataTable GetAllBranches() { 
             SqlConnection connection = new SqlConnection(cadenaConexion);
 
@@ -171,6 +173,154 @@ namespace GymTEC_API.Resources
                 connection.Close();
             }
         }
+
+        //End Branch Functions
+
+
+
+
+
+
+        //Start Services Functions
+        public static DataTable GetAllServices()
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Service", connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+
+
+        public static bool ExecuteAddService(Service json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+                //llamada al stored procedure 
+                string query = string.Format("INSERT INTO Service(service_id,service_description)" +
+                                                "VALUES ('{0}', '{1}')", json.ID_Service, json.Description);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public static bool ExecuteDeleteService(Service_IDENT json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+
+                string query = string.Format("DELETE FROM Client_lesson\r\n" +
+                                            "WHERE lesson_id = {0}\r\n\r\n " +
+                                            "DELETE FROM Lesson\r\n " +
+                                            "WHERE lesson_id = {0}\r\n\r\n " +
+                                            "DELETE FROM Service\r\n " +
+                                            "WHERE service_id = '{1}'", Convert.ToInt32(json.ID_Service),json.ID_Service);
+
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public static bool ExecuteModService(Service json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+                //llamada al stored procedure 
+                string query = string.Format("UPDATE Service " +
+                                             "SET service_description = '{1}'" +
+                                             "WHERE service_id = '{0}';", json.ID_Service, json.Description);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+
+        //End Services Functions
+
+
 
         public static DataSet ListarTablas(string nombreProcedimiento, List<Parameter> parameters = null)
         {
