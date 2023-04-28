@@ -8,7 +8,8 @@
         public int Serial_Number { get; set; } = 0;//Atributo llave
         public string Price { get; set; } = string.Empty;
         public int gear_ID { get; set;} = 0; //Conector con GearAvailable
-
         //public GearAvailable Gear_Id { get; set; } = new GearAvailable();
+        public string gear_Name { get; set; } = string.Empty;
+        public string gear_Type { get; set; } = string.Empty;
     }
 }

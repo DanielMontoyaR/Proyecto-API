@@ -54,7 +54,7 @@ namespace GymTEC_API.Controllers
                     branch.District = row["district"].ToString();
                     branch.Canton = row["canton"].ToString();
                     branch.Name = row["branch_name"].ToString();
-                    branch.max_Size = (int)row["max_capacity"];
+                    branch.max_Size = Convert.ToInt32(row["max_capacity"]);
                     branch.opening_Date = row["openDate"].ToString();
                     branch.schedule_Attention = row["branch_schedule"].ToString();
 

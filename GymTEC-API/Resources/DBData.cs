@@ -180,7 +180,9 @@ namespace GymTEC_API.Resources
             try
             {
                 connection.Open();
-                SqlCommand cmd = new SqlCommand("SELECT name FROM Gear_avalible", connection); 
+                SqlCommand cmd = new SqlCommand("SELECT Gear_avalible.name, Gear_type.gear_type\r\n" +
+                    "FROM Gear_avalible\r\n" +
+                    "INNER JOIN Gear_type ON Gear_type.gear_id = Gear_avalible.gear_id ", connection); 
                 cmd.CommandType = System.Data.CommandType.Text;
 
                 DataTable dataTable = new DataTable();
@@ -201,6 +203,8 @@ namespace GymTEC_API.Resources
             finally { connection.Close(); }
 
         }
+
+
         public static DataTable GetGear(int idGear)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -235,7 +239,7 @@ namespace GymTEC_API.Resources
 
         }
 
-        public static bool ExecuteAddGear(GearAvailable json)
+        public static bool ExecuteAddGear(GearOBT json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
 
@@ -245,7 +249,9 @@ namespace GymTEC_API.Resources
                 connection.Open();
                 //llamada al stored procedure 
                 string query = string.Format("INSERT INTO Gear_avalible(gear_id, description, name)" +
-                                                "VALUES ({0}, '{1}', '{2}')", json.gear_ID, json.Description, json.Name);
+                                                "VALUES ({0}, '{1}', '{2}') " +
+                                                "INSERT INTO Gear_type(gear_id,gear_type) " +
+                                                "VALUES ({3}, '{4}') ", json.gear_ID, json.Description, json.Name, json.gear_ID, json.Gear_Type);
                 Console.WriteLine(query);
                 SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.CommandType = System.Data.CommandType.Text;
@@ -268,39 +274,7 @@ namespace GymTEC_API.Resources
             }
         }
 
-        public static bool ExecuteAddGearType(GearType json) //ver el tipo
-        {
-            SqlConnection connection = new SqlConnection(cadenaConexion);
-
-
-            try
-            {
-                connection.Open();
-                //llamada al stored procedure 
-                string query = string.Format("INSERT INTO Gear_type(gear_id, gear_type) " +
-                                                 "VALUES ({0}, '{1}') ", json.gear_ID, json.Gear_Type);
-                Console.WriteLine(query);
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.CommandType = System.Data.CommandType.Text;
-
-
-
-                int i = cmd.ExecuteNonQuery();
-
-                return (i > 0) ? true : false;
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
-        public static bool ExecuteModGear(GearAvailable json)
+        public static bool ExecuteModGear(GearOBT json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
 
@@ -311,7 +285,10 @@ namespace GymTEC_API.Resources
                 //llamada al stored procedure 
                 string query = string.Format("UPDATE Gear_avalible " +
                     "SET gear_id = '{0}', description = '{1}', name = '{2}' " +
-                                              "WHERE gear_id = {0} ", json.gear_ID, json.Description, json.Name);
+                                              "WHERE gear_id = {0} " +
+                                              "UPDATE Gear_type " +
+                    "SET gear_id = {3}, gear_type = '{4}' " +
+                                              "WHERE gear_id = {0} ", json.gear_ID, json.Description, json.Name, json.gear_ID, json.Gear_Type);
                 Console.WriteLine(query);
                 SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.CommandType = System.Data.CommandType.Text;
@@ -334,39 +311,6 @@ namespace GymTEC_API.Resources
             }
         }
 
-        public static bool ExecuteModGearType(GearType json)
-        {
-            SqlConnection connection = new SqlConnection(cadenaConexion);
-
-
-            try
-            {
-                connection.Open();
-                //llamada al stored procedure 
-                string query = string.Format("UPDATE Gear_type " +
-                    "SET gear_id = '{0}', gear_type = '{1}' " +
-                                              "WHERE gear_id = {0} ", json.gear_ID, json.Gear_Type);
-                Console.WriteLine(query);
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.CommandType = System.Data.CommandType.Text;
-
-
-
-                int i = cmd.ExecuteNonQuery();
-
-                return (i > 0) ? true : false;
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
 
         public static bool ExecuteDeleteGear(GearAvailable_IDENT json)
         {
@@ -377,7 +321,9 @@ namespace GymTEC_API.Resources
             {
                 connection.Open();
                 string query = string.Format("DELETE FROM Gear_avalible " +
-                                                "WHERE gear_id = '{0}'", json.gear_ID);
+                                                "WHERE gear_id = '{0}' " +
+                                                "DELETE FROM Gear_type " +
+                                                "WHERE gear_id = '{0}' ", json.gear_ID);
 
                 Console.WriteLine(query);
                 SqlCommand cmd = new SqlCommand(query, connection);
@@ -411,7 +357,10 @@ namespace GymTEC_API.Resources
             try
             {
                 connection.Open();
-                SqlCommand cmd = new SqlCommand("SELECT brand, serial_num  FROM Inventory", connection);
+                SqlCommand cmd = new SqlCommand("SELECT Inventory.brand, Inventory.serial_num, Gear_avalible.name, Gear_type.gear_type\r\n" +
+                    "FROM Inventory\r\n" +
+                    "INNER JOIN Gear_avalible ON Gear_avalible.gear_id = Inventory.gear_id \r\n" +
+                    "INNER JOIN Gear_type ON gear_type.gear_id = Inventory.gear_id", connection);
                 cmd.CommandType = System.Data.CommandType.Text;
 
                 DataTable dataTable = new DataTable();
@@ -445,7 +394,7 @@ namespace GymTEC_API.Resources
                     + "FROM Gear_type "
                     + "FULL OUTER JOIN Gear_avalible "
                     + "ON Gear_avalible.gear_id = Gear_type.gear_id "
-                    + "WHERE Gear_avalible.gear_id = {0}", idGear);
+                    + "WHERE Gear_avalible.gear_id = {0}", idInventory);
                 SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.CommandType = System.Data.CommandType.Text;
 

@@ -17,18 +17,18 @@ namespace GymTEC_API.Controllers
 
             DataTable allBranch = DBData.GetAllInventory();
 
-            List<String> inventory_L = new List<String>();
+            List<Inventory> inventory_L = new List<Inventory>();
 
             foreach (DataRow row in allBranch.Rows)
             {
                 Inventory inventory = new Inventory(); 
-                inventory.Serial_Number = (int)row["serial_num"];
+                inventory.Serial_Number = Convert.ToInt32(row["serial_num"]);
                 inventory.Brand = row["brand"].ToString();
+                inventory.gear_Name = row["name"].ToString();
+                inventory.gear_Type = row["gear_type"].ToString();
 
-                inventory_L.Add(inventory.Brand);
-                inventory_L.Add(inventory.Serial_Number.ToString());
+                inventory_L.Add(inventory);
                 
-
             }
 
             JSON_Object json = new JSON_Object("ok", inventory_L);
@@ -54,9 +54,9 @@ namespace GymTEC_API.Controllers
 
                     inventory.Branch_Name = row["branch_name"].ToString();
                     inventory.Brand = row["brand"].ToString();
-                    inventory.Serial_Number = (int)row["serial_num"];
+                    inventory.Serial_Number = Convert.ToInt32(row["serial_num"]);
                     inventory.Price = row["price"].ToString();
-                    inventory.gear_ID = (int)row["gear_id"];
+                    inventory.gear_ID = Convert.ToInt32(row["gear_id"]);
                     
                 }
 
