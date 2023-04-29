@@ -321,6 +321,444 @@ namespace GymTEC_API.Resources
         //End Services Functions
 
 
+        //Start Payroll Functions
+
+        public static DataTable GetAllPayrolls()
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Form", connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+
+
+        public static bool ExecuteAddPayroll(Payroll json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+                //llamada al stored procedure 
+                string query = string.Format("INSERT INTO Form(id,typepayment,description)" +
+                                                "VALUES ('{0}', '{1}', '{2}')", json.ID_Payroll, json.Payroll_Type, json.Description);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+        public static bool ExecuteModPayroll(Payroll json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+                //llamada al stored procedure 
+                string query = string.Format("UPDATE Form " +
+                                             "SET typepayment = '{1}', description = '{2}' " +
+                                             "WHERE id = '{0}';", json.ID_Payroll, json.Payroll_Type, json.Description);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+
+        //End Payroll Functions
+
+        //Start Employee Functions
+        public static DataTable GetAllEmployees()
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                SqlCommand cmd = new SqlCommand("SELECT Fname, FLname, id FROM Employee", connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+
+        public static DataTable GetEmployee(String Employee_ID)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                string query = string.Format("SELECT * FROM Employee WHERE id = '{0}'", Employee_ID);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+
+        public static bool ExecuteAddEmployee(Employee json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+                //llamada al stored procedure 
+                string query = string.Format("INSERT INTO Employee(province,district,canton,email,password,id,Fname,Sname,FLname,SLname,Workstaion_id,form_id,branch_name)" +
+                                                "VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}')", 
+                                                json.Employee_Province, json.Employee_District, json.Employee_Canton,json.Employee_Email,json.Employee_Password,json.Employee_ID,
+                                                json.Employee_Fname,json.Employee_Mname,json.Employee_LName1,json.Employee_LName2, json.Employee_Workstation_id,json.Employee_payroll_id,json.Branch_Name);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public static bool ExecuteDeleteEmployee(Employee_IDENT json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+
+                string query = string.Format("DELETE FROM Employee" +
+                                             "WHERE id='{0}'",json.Employee_ID);
+
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public static bool ExecuteModEmployee(Employee json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+                //llamada al stored procedure 
+                string query = string.Format("UPDATE Employee " +
+                                             "SET province = '{0}' ,district = '{1}',canton = '{2}',email = '{3}',password='{4}' ,id = '{5}', Fname = '{6}', Sname = '{7}',FLname = '{8}',SLname='{9}' ,Workstaion_id = '{10}' ,form_id ='{11}' ,branch_name = '{12}')",
+                                                json.Employee_Province, json.Employee_District, json.Employee_Canton, json.Employee_Email, json.Employee_Password, json.Employee_ID,
+                                                json.Employee_Fname, json.Employee_Mname, json.Employee_LName1, json.Employee_LName2, json.Employee_Workstation_id, json.Employee_payroll_id, json.Branch_Name);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                /*
+                 *("INSERT INTO Employee(province,district,canton,email,password,id,Fname,Sname,FLname,SLname,Workstaion_id,form_id,branch_name)" +
+                                                "VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}', '{13}')", 
+                                                json.Employee_Province, json.Employee_District, json.Employee_Canton,json.Employee_Email,json.Employee_Password,json.Employee_ID,
+                                                json.Employee_Fname,json.Employee_Mname,json.Employee_LName1,json.Employee_LName2, json.Employee_Workstation_id,json.Employee_payroll_id,json.Branch_Name); 
+                 */
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+
+
+        //End Employee Functions
+
+        //Start Product Functions
+        public static DataTable GetAllProducts()
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Product", connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+
+        public static DataTable GetProduct(String Barcode)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                string query = string.Format("SELECT * FROM Product WHERE barcode = '{0}'", Barcode);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+
+        public static bool ExecuteAddProduct(Product json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+                //llamada al stored procedure 
+                string query = string.Format("INSERT INTO Product(barcode,name,description,price,branch_name)" +
+                                                "VALUES ('{0}', '{1}', '{2}', {3}, '{4}')",
+                                                json.Barcode, json.Name, json.Description, json.price, json.branch_Name);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public static bool ExecuteDeleteProduct(Product_IDENT json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+
+                string query = string.Format("DELETE FROM Product " +
+                                             "WHERE barcode='{0}'", json.Barcode);
+
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public static bool ExecuteModProduct(Product json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+                //llamada al stored procedure 
+                string query = string.Format("UPDATE Product " +
+                                             "SET name = '{1}',description = '{2}',price = {3},branch_name='{4}'" +
+                                             "WHERE barcode = '{0}'", json.Barcode, json.Name, json.Description, json.price, json.branch_Name);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+
+        //End Product Functions
+
+
 
         public static DataSet ListarTablas(string nombreProcedimiento, List<Parameter> parameters = null)
         {
