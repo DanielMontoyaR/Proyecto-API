@@ -357,7 +357,7 @@ namespace GymTEC_API.Resources
             try
             {
                 connection.Open();
-                SqlCommand cmd = new SqlCommand("SELECT Inventory.brand, Inventory.serial_num, Gear_avalible.name, Gear_type.gear_type\r\n" +
+                SqlCommand cmd = new SqlCommand("SELECT Inventory.brand, Inventory.serial_num, Gear_avalible.name, Gear_type.gear_type \r\n" +
                     "FROM Inventory\r\n" +
                     "INNER JOIN Gear_avalible ON Gear_avalible.gear_id = Inventory.gear_id \r\n" +
                     "INNER JOIN Gear_type ON gear_type.gear_id = Inventory.gear_id", connection);
@@ -390,11 +390,11 @@ namespace GymTEC_API.Resources
             try
             {
                 connection.Open();
-                string query = string.Format("SELECT Gear_avalible.gear_id, Gear_avalible.description, Gear_avalible.name, Gear_type.gear_type "
-                    + "FROM Gear_type "
-                    + "FULL OUTER JOIN Gear_avalible "
-                    + "ON Gear_avalible.gear_id = Gear_type.gear_id "
-                    + "WHERE Gear_avalible.gear_id = {0}", idInventory);
+                string query = string.Format("SELECT Inventory.brand, Inventory.serial_num, Inventory.branch_name, Inventory.price, Inventory.gear_id, Gear_avalible.name, Gear_type.gear_type " +
+                    "FROM Inventory " +
+                    "INNER JOIN Gear_avalible ON Gear_avalible.gear_id = Inventory.gear_id " +
+                    "INNER JOIN Gear_type ON gear_type.gear_id = Inventory.gear_id "
+                    + "WHERE Inventory.serial_num = {0}", idInventory);
                 SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.CommandType = System.Data.CommandType.Text;
 
@@ -428,7 +428,7 @@ namespace GymTEC_API.Resources
             {
                 connection.Open();
                 //llamada al stored procedure 
-                string query = string.Format("INSERT INTO Inventory(brand,serial_num,price,gear_id, branch_name) " +
+                string query = string.Format("INSERT INTO Inventory(brand,serial_num,price,gear_id, branch_name)  " +
                                                 "VALUES ('{0}', {1}, '{2}', {3}, '{4}')", json.Brand, json.Serial_Number, json.Price, json.gear_ID, json.Branch_Name);
                 Console.WriteLine(query);
                 SqlCommand cmd = new SqlCommand(query, connection);
@@ -451,7 +451,168 @@ namespace GymTEC_API.Resources
                 connection.Close();
             }
         }
+        public static bool ExecuteModInventory(Inventory_ALL json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
 
 
+            try
+            {
+                connection.Open();
+                //llamada al stored procedure 
+                string query = string.Format("UPDATE Inventory " +
+                    "SET brand = '{0}', price = {1}, branch_name = '{2}' " +
+                                              "WHERE serial_num = {3}", json.Brand, json.Price, json.Branch_Name, json.Serial_Number);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public static bool ExecuteDeleteInventory(Inventory_IDENT json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+                string query = string.Format("DELETE FROM Inventory " +
+                                                "WHERE serial_num = '{0}' ", json.Serial_Number);
+
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+        //********************Clases***********************8
+        //Add lesson
+        public static bool ExecuteAddLesson(Lesson json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+                //llamada al stored procedure 
+                string query = string.Format("INSERT INTO Lesson(lesson_id,quotas,search_begin,search_end, start_date,end_date,branch_name,instructor_id,service_id)   " +
+                                                "VALUES ({0}, {1}, '{2}', '{3}', '{4}', '{5}', '{6}', {7}, {8})", json.ID_Lessons, json.Quotas, json.search_Date, json.search_End, json.Start_Date, json.search_End, json.Branch_Name, json.instructor_id, json.service_id);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+        public static DataTable GetAllClasses()
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                SqlCommand cmd = new SqlCommand("SELECT lesson_id, branch_name, instructor_id, service_id, quotas FROM Lesson", connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+        //Get class for admin
+        public static DataTable GetClass(int idLesson) 
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                string query = string.Format("SELECT Lesson.lesson_id, Lesson.quotas, Lesson.start_date, Lesson.end_date, Lesson.branch_name, Lesson.instructor_id, Lesson.service_id, Service.service_description, Client_lesson.client_id " +
+                    "FROM Lesson " +
+                    "INNER JOIN Service ON Service.service_id = Lesson.service_id " +
+                    "INNER JOIN Client_lesson ON Client_lesson.lesson_id = Lesson.lesson_id "
+                    + "WHERE Lesson.lesson_id = {0}", idLesson);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+        
     }
 }
