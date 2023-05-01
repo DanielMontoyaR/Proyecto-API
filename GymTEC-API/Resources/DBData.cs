@@ -492,7 +492,7 @@ namespace GymTEC_API.Resources
                 connection.Open();
                 //llamada al stored procedure 
                 string query = string.Format("INSERT INTO Employee(province,district,canton,email,password,id,Fname,Sname,FLname,SLname,Workstaion_id,form_id,branch_name)" +
-                                                "VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}')", 
+                                                " VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}')", 
                                                 json.Employee_Province, json.Employee_District, json.Employee_Canton,json.Employee_Email,json.Employee_Password,json.Employee_ID,
                                                 json.Employee_Fname,json.Employee_Mname,json.Employee_LName1,json.Employee_LName2, json.Employee_Workstation_id,json.Employee_payroll_id,json.Branch_Name);
                 Console.WriteLine(query);
@@ -526,7 +526,7 @@ namespace GymTEC_API.Resources
             {
                 connection.Open();
 
-                string query = string.Format("DELETE FROM Employee" +
+                string query = string.Format("DELETE FROM Employee " +
                                              "WHERE id='{0}'",json.Employee_ID);
 
                 Console.WriteLine(query);
@@ -561,7 +561,8 @@ namespace GymTEC_API.Resources
                 connection.Open();
                 //llamada al stored procedure 
                 string query = string.Format("UPDATE Employee " +
-                                             "SET province = '{0}' ,district = '{1}',canton = '{2}',email = '{3}',password='{4}' ,id = '{5}', Fname = '{6}', Sname = '{7}',FLname = '{8}',SLname='{9}' ,Workstaion_id = '{10}' ,form_id ='{11}' ,branch_name = '{12}')",
+                                             "SET province = '{0}' ,district = '{1}',canton = '{2}',email = '{3}',password='{4}', Fname = '{6}', Sname = '{7}',FLname = '{8}',SLname='{9}' ,Workstaion_id = '{10}' ,form_id ='{11}' ,branch_name = '{12}' " +
+                                             "WHERE id = '{5}' ",
                                                 json.Employee_Province, json.Employee_District, json.Employee_Canton, json.Employee_Email, json.Employee_Password, json.Employee_ID,
                                                 json.Employee_Fname, json.Employee_Mname, json.Employee_LName1, json.Employee_LName2, json.Employee_Workstation_id, json.Employee_payroll_id, json.Branch_Name);
                 Console.WriteLine(query);

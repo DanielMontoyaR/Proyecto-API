@@ -14,9 +14,9 @@ namespace GymTEC_API.Controllers
         { //Function for obtaining all branch names.
 
 
-            DataTable allEmployee = DBData.GetAllPayrolls();
+            DataTable allEmployee = DBData.GetAllEmployees();
 
-            List<Employee> Employee_L = new List<Employee>();
+            List<String> Employee_L = new List<String>();
 
 
 
@@ -27,9 +27,14 @@ namespace GymTEC_API.Controllers
                 employee.Employee_LName1 = row["FLname"].ToString();
                 employee.Employee_ID = row["id"].ToString();
 
-                Employee_L.Add(employee);
+                Employee_L.Add($"{employee.Employee_Fname}, {employee.Employee_LName1}, {employee.Employee_ID}");
+
             }
 
+
+
+            //Employee_L.Add(employee.Employee_LName1);
+            //Employee_L.Add(employee.Employee_ID);
             JSON_Object json = new JSON_Object("ok", Employee_L);
             return Ok(json);
 
@@ -41,7 +46,7 @@ namespace GymTEC_API.Controllers
         { //Function for obtaining  branch info.
 
 
-            DataTable allEmployee = DBData.GetBranch(Employee_ID.Employee_ID);
+            DataTable allEmployee = DBData.GetEmployee(Employee_ID.Employee_ID);
 
             Employee employee = new Employee();
 
@@ -76,7 +81,7 @@ namespace GymTEC_API.Controllers
 
         }
         /*
-        [HttpPost("add_employee")]
+        [HttpPost("add_employee")] //This method is handled in SignUp.cs
         public async Task<ActionResult<JSON_Object>> AddEmployee(Employee employee_data)
         {
             JSON_Object json = new JSON_Object("error", null); //Se inicializa con error y null para ver si hay algun error.
