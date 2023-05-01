@@ -9,6 +9,13 @@ namespace GymTEC_API.Controllers
     [Route("api")]
     public class ProductosController:ControllerBase
     {
+
+        /// <summary>
+        /// Method that returns a list with all the information
+        /// of all products found within the database.
+        /// </summary>
+        /// <returns>A List with the Barcode, Name, Description, Price and branch_Name of all products.</returns>
+        /// <remarks>This method queries a database to retrieve employees.</remarks>
         [HttpGet("all_product")]
         public async Task<ActionResult<JSON_Object>> AllProducts()
         { //Function for obtaining all Products.
@@ -38,6 +45,13 @@ namespace GymTEC_API.Controllers
 
         }
 
+        /// <summary>
+        /// Method that returns a list with all the information 
+        /// of a product given their Barcode.
+        /// </summary>
+        /// <param name="Product_Barcode">The Barcode of the product from which to retrieve all data.</param>
+        /// <returns>A list of all employee information given the specified ID.</returns>
+        /// <remarks>This method queries a database to retrieve employee.</remarks>
         [HttpPost("obt_product")]
         public async Task<ActionResult<JSON_Object>> ObtainProduct(Product_IDENT Product_Barcode)
         { //Function for obtaining  branch info.
@@ -68,6 +82,12 @@ namespace GymTEC_API.Controllers
 
         }
 
+        /// <summary>
+        /// Method that adds a product.
+        /// </summary>
+        /// <param name="product_data">All product information to add to the database.</param>
+        /// <returns>A confimation note or an error.</returns>
+        /// <remarks>This method queries a database to delete employee.</remarks>
         [HttpPost("add_product")]
         public async Task<ActionResult<JSON_Object>> AddProduct(Product product_data)
         {
@@ -87,6 +107,13 @@ namespace GymTEC_API.Controllers
             }
 
         }
+
+        /// <summary>
+        /// Method that deletes a product given their Barcode.
+        /// </summary>
+        /// <param name="product_data">The Barcode of the product from which to delete all data.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to delete employee.</remarks>
         [HttpDelete("delete_product")]
         public async Task<ActionResult<JSON_Object>> DeleteProduct(Product_IDENT product_data)
         {
@@ -108,6 +135,12 @@ namespace GymTEC_API.Controllers
         }
 
 
+        /// <summary>
+        /// Method that modifies a product given their information.
+        /// </summary>
+        /// <param name="product_data">The information of the product from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to delete employee.</remarks>
         [HttpPut("mod_product")]
         public async Task<ActionResult<JSON_Object>> ModProduct(Product product_data)
         {

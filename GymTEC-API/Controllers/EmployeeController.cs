@@ -5,10 +5,21 @@ using System.Data;
 
 namespace GymTEC_API.Controllers
 {
+
+
     [ApiController]
     [Route("api")]
     public class EmployeeController : ControllerBase
     {
+
+        /// <summary>
+        /// Method that returns a list with the First Name, Last Name and ID 
+        /// of all employees found within the database.
+        /// </summary>
+        /// <returns>A List with the First Name, Last Name and ID.</returns>
+        /// <remarks>This method queries a database to retrieve employees.</remarks>
+
+
         [HttpGet("all_employee")]
         public async Task<ActionResult<JSON_Object>> AllEmployees()
         { //Function for obtaining all branch names.
@@ -40,6 +51,14 @@ namespace GymTEC_API.Controllers
 
 
         }
+
+        /// <summary>
+        /// Method that returns a list with all the information 
+        /// of an employee given their ID.
+        /// </summary>
+        /// <param name="Employee_ID">The ID of the employee from which to retrieve all data.</param>
+        /// <returns>A list of all employee information given the specified ID.</returns>
+        /// <remarks>This method queries a database to retrieve employee.</remarks>
 
         [HttpPost("obt_employee")]
         public async Task<ActionResult<JSON_Object>> ObtainEmployee(Employee_IDENT Employee_ID)
@@ -84,7 +103,7 @@ namespace GymTEC_API.Controllers
         [HttpPost("add_employee")] //This method is handled in SignUp.cs
         public async Task<ActionResult<JSON_Object>> AddEmployee(Employee employee_data)
         {
-            JSON_Object json = new JSON_Object("error", null); //Se inicializa con error y null para ver si hay algun error.
+            JSON_Object json = new JSON_Object("error", null); //An error and null are initialized in order to verify any error.
 
             bool var = DBData.ExecuteAddEmployee(employee_data);
             Console.WriteLine(var);
@@ -101,11 +120,16 @@ namespace GymTEC_API.Controllers
 
         }*/
 
-
+        /// <summary>
+        /// Method that deletes an employee given their ID.
+        /// </summary>
+        /// <param name="employee_data">The ID of the employee from which to delete all data.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to delete employee.</remarks>
         [HttpDelete("delete_employee")]
         public async Task<ActionResult<JSON_Object>> DeleteEmployee(Employee_IDENT employee_data)
         {
-            JSON_Object json = new JSON_Object("error", null); //Se inicializa con error y null para ver si hay algun error.
+            JSON_Object json = new JSON_Object("error", null); //An error and null are initialized in order to verify any error.
 
 
             bool var = DBData.ExecuteDeleteEmployee(employee_data);
@@ -122,11 +146,16 @@ namespace GymTEC_API.Controllers
 
         }
 
-
+        /// <summary>
+        /// Method that modifies an employee given their information.
+        /// </summary>
+        /// <param name="employee_data">The information of the employee from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to delete employee.</remarks>
         [HttpPut("mod_employee")]
         public async Task<ActionResult<JSON_Object>> ModEmployee(Employee employee_data)
         {
-            JSON_Object json = new JSON_Object("error", null); //Se inicializa con error y null para ver si hay algun error.
+            JSON_Object json = new JSON_Object("error", null); //An error and null are initialized in order to verify any error.
 
             bool var = DBData.ExecuteModEmployee(employee_data);
             Console.WriteLine(var);
@@ -143,7 +172,6 @@ namespace GymTEC_API.Controllers
 
 
         }
-
 
     }
 }

@@ -38,7 +38,7 @@ namespace GymTEC_API.Controllers
 
             if (client_credentials.ID_Credentials == informacion_cliente.ID_Client && client_credentials.Password == informacion_cliente.Password)
             {
-                informacion_cliente.Name = "Daniel";
+                informacion_cliente.FName1 = "Daniel";
                 informacion_cliente.Last_name1 = "M";
                 informacion_cliente.Last_name2 = "R";
                 json.status = "ok";

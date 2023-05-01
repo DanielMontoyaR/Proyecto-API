@@ -760,6 +760,169 @@ namespace GymTEC_API.Resources
         //End Product Functions
 
 
+        //Start Client Functions
+        public static bool ExecuteAddClient(Client json) {
+
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                //llamada al stored procedure 
+                string query = string.Format("INSERT INTO Client(client_id,address,weight,IMC,Fname,Sname,FLname,SLname,password,bdate)" +
+                                                "VALUES ('{0}', '{1}', {2}, {3}, '{4}', '{5}', '{6}', '{7}', '{8}', '{9}')",
+                                                json.ID_Client, json.Address, json.Weight, json.BMI, json.FName1,json.FName2, json.Last_name1,json.Last_name2,json.Password,json.Birth_Date);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+
+        }
+        public static DataTable GetAllClients()
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {//Nombre apellido id email
+                connection.Open();
+                SqlCommand cmd = new SqlCommand("SELECT Fname,FLname,client_id FROM Client", connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+
+        public static DataTable GetClient(String id_client)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                string query = string.Format("SELECT * FROM Client WHERE client_id= '{0}'", id_client);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+
+
+        public static bool ExecuteDeleteClient(Client_IDENT json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+
+                string query = string.Format("DELETE FROM Client " +
+                                             "WHERE client_id='{0}'", json.ID_Client);
+
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public static bool ExecuteModClient(Client json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+                //llamada al stored procedure 
+                string query = string.Format("UPDATE Client " +
+                                             "SET address = '{1}',weight = {2},IMC = {3},Fname='{4}',Sname='{5}',FLname = '{6}',SLname='{7}',password='{8}',bdate='{9}' " +
+                                             "WHERE client_id = '{0}'", json.ID_Client, json.Address, json.Weight, json.BMI, json.FName1,json.FName2,json.Last_name1,json.Last_name2,json.Password,json.Birth_Date);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        //End Client Functions
+
 
         public static DataSet ListarTablas(string nombreProcedimiento, List<Parameter> parameters = null)
         {

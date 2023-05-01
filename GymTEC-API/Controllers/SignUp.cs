@@ -10,11 +10,29 @@ namespace GymTEC_API.Controllers
     [Route("api")]
     public class SignUp : ControllerBase
     {
+        /// <summary>
+        /// Method that signs up a client.
+        /// </summary>
+        /// <param name="nuevo_cliente">All client information to add to the database.</param>
+        /// <returns>A confimation note or an error.</returns>
+        /// <remarks>This method queries a database to delete employee.</remarks>
         [HttpPost("add_client")]
         public async Task<ActionResult<JSON_Object>> add_client(Client nuevo_cliente) {
+
             JSON_Object json = new JSON_Object("okay", nuevo_cliente);
 
-            return Ok(json);
+            bool var = DBData.ExecuteAddClient(nuevo_cliente);
+            Console.WriteLine(var);
+            if (var)
+            {
+                json.status = "ok";
+                return Ok(json);
+            }
+            else
+            {
+
+                return BadRequest(json);
+            }
         }
 
         [HttpPost("add_employee")]

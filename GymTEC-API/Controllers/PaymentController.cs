@@ -9,6 +9,12 @@ namespace GymTEC_API.Controllers
     [Route("api")]
     public class PaymentController:ControllerBase
     {
+
+        /// <summary>
+        /// Method that gets all employee payrolls.
+        /// </summary>
+        /// <returns>A list containing all the information from the employees' payrolls.</returns>
+        /// <remarks>This method queries a database to delete employee.</remarks>
         [HttpGet("all_payrolls")]
         public async Task<ActionResult<JSON_Object>> AllPayrolls()
         { //Function for obtaining all branch names.
@@ -36,10 +42,16 @@ namespace GymTEC_API.Controllers
 
         }
 
+        /// <summary>
+        /// Method that adds a payroll.
+        /// </summary>
+        /// <param name="payroll_data">All payroll information to add to the database.</param>
+        /// <returns>A confimation note or an error.</returns>
+        /// <remarks>This method queries a database to delete employee.</remarks>
         [HttpPost("add_payroll")]
         public async Task<ActionResult<JSON_Object>> AddPayroll(Payroll payroll_data)
         {
-            JSON_Object json = new JSON_Object("error", null); //Se inicializa con error y null para ver si hay algun error.
+            JSON_Object json = new JSON_Object("error", null); //An error and null are initialized in order to verify any error.
 
             bool var = DBData.ExecuteAddPayroll(payroll_data);
             Console.WriteLine(var);
@@ -56,10 +68,16 @@ namespace GymTEC_API.Controllers
 
         }
 
+        /// <summary>
+        /// Method that modifies a payroll given their information.
+        /// </summary>
+        /// <param name="payroll_data">The information of the payroll from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to delete employee.</remarks>
         [HttpPut("mod_payroll")]
         public async Task<ActionResult<JSON_Object>> ModPayroll(Payroll payroll_data)
         {
-            JSON_Object json = new JSON_Object("error", null); //Se inicializa con error y null para ver si hay algun error.
+            JSON_Object json = new JSON_Object("error", null); //An error and null are initialized in order to verify any error.
 
             bool var = DBData.ExecuteModPayroll(payroll_data);
             Console.WriteLine(var);
