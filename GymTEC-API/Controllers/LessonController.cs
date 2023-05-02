@@ -63,7 +63,7 @@ namespace GymTEC_API.Controllers
 
             DataTable allLesson = DBData.GetClass(lesson_name.ID_Lessons);
 
-            Lesson_Administration LessonOBT = new Lesson_Administration();
+            
             List<Lesson_Administration> lesson_List = new List<Lesson_Administration>();
 
 
@@ -71,7 +71,7 @@ namespace GymTEC_API.Controllers
             {
                 foreach (DataRow row in allLesson.Rows)
                 {
-
+                    Lesson_Administration LessonOBT = new Lesson_Administration();
                     LessonOBT.ID_Lessons = Convert.ToInt32(row["lesson_id"]);
                     LessonOBT.Quotas = Convert.ToInt32(row["quotas"]);
                     LessonOBT.Start_Date = row["start_date"].ToString();
@@ -82,9 +82,9 @@ namespace GymTEC_API.Controllers
                     LessonOBT.service_desc = row["service_description"].ToString();
                     LessonOBT.client_id = row["client_id"].ToString();
 
-
+                    lesson_List.Add(LessonOBT);
                 }
-                lesson_List.Add(LessonOBT);
+                
 
 
                 JSON_Object json = new JSON_Object("ok", lesson_List);
@@ -93,6 +93,28 @@ namespace GymTEC_API.Controllers
             else { return BadRequest(); }
 
         }
+        [HttpPost("add_client_to_lesson")] //para cliente
+        public async Task<ActionResult<JSON_Object>> EnrollLesson(Client_Lessons client_lesson_data)
+        {
+            JSON_Object json = new JSON_Object("error", null); //Se inicializa con error y null para ver si hay algun error.
+
+            bool var = DBData.ExecuteEnrollLesson(client_lesson_data);
+            Console.WriteLine(var);
+            if (var)
+            {
+                json.status = "ok";
+                return Ok(json);
+            }
+            else
+            {
+
+                return BadRequest(json);
+            }
+
+
+        }
+
+
     }
     
 }

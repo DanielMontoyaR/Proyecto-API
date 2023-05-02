@@ -529,7 +529,7 @@ namespace GymTEC_API.Resources
                 connection.Open();
                 //llamada al stored procedure 
                 string query = string.Format("INSERT INTO Lesson(lesson_id,quotas,search_begin,search_end, start_date,end_date,branch_name,instructor_id,service_id)   " +
-                                                "VALUES ({0}, {1}, '{2}', '{3}', '{4}', '{5}', '{6}', {7}, {8})", json.ID_Lessons, json.Quotas, json.search_Date, json.search_End, json.Start_Date, json.search_End, json.Branch_Name, json.instructor_id, json.service_id);
+                                                "VALUES ({0}, {1}, '{2}', '{3}', '{4}', '{5}', '{6}', {7}, {8})", json.ID_Lessons, json.Quotas , json.search_Date, json.search_End, json.Start_Date, json.search_End, json.Branch_Name, json.instructor_id, json.service_id);
                 Console.WriteLine(query);
                 SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.CommandType = System.Data.CommandType.Text;
@@ -613,6 +613,39 @@ namespace GymTEC_API.Resources
             finally { connection.Close(); }
 
         }
-        
+        //Enroll lesson
+        public static bool ExecuteEnrollLesson(Client_Lessons json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+                //llamada al stored procedure 
+                string query = string.Format("INSERT INTO Client_lesson (client_id,lesson_id) VALUES ({0}, {1}) " +
+                    "UPDATE Lesson SET quotas = quotas - 1 WHERE lesson_id = {1} ", json.client_id, json.lesson_id);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
     }
 }
