@@ -4,8 +4,8 @@
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+        public int gear_ID { get; set; } = 0; //PK
 
-        public GearType id_Gear { get; set; } = new GearType();
 
     }
 }

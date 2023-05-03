@@ -1,8 +1,8 @@
 ﻿namespace GymTEC_API.Entidades
 {
-    public class GearType
+    public class GearINNER
     {
-        public int gear_ID { get; set; } = 0; //PK
+        public string Name { get; set; } = string.Empty;
         public string Gear_Type { get; set; } = string.Empty;
     }
 }
