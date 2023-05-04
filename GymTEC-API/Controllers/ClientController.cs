@@ -11,6 +11,8 @@ namespace GymTEC_API.Controllers
 {
     public class ClientController : ControllerBase
     {
+
+
         /// <summary>
         /// Method that returns a list with the First Name, Last Name and ID
         /// of all clients found within the database.

@@ -770,7 +770,7 @@ namespace GymTEC_API.Resources
                 connection.Open();
                 //llamada al stored procedure 
                 string query = string.Format("INSERT INTO Client(client_id,address,weight,IMC,Fname,Sname,FLname,SLname,password,bdate,email)" +
-                                                "VALUES ('{0}', '{1}', {2}, {3}, '{4}', '{5}', '{6}', '{7}', '{8}', '{9}')",
+                                                "VALUES ('{0}', '{1}', {2}, {3}, '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}')",
                                                 json.ID_Client, json.Address, json.Weight, json.BMI, json.FName1,json.FName2, json.Last_name1,json.Last_name2,json.Password,json.Birth_Date,json.Email);
                 Console.WriteLine(query);
                 SqlCommand cmd = new SqlCommand(query, connection);
