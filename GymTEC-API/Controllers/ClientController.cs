@@ -80,6 +80,7 @@ namespace GymTEC_API.Controllers
                     client.Last_name2   = row["SLname"].ToString();
                     client.Password     = row["password"].ToString();
                     client.Birth_Date   = row["bdate"].ToString();
+                    client.Email        = row["email"].ToString();
 
 
                 }
