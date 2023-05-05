@@ -55,8 +55,7 @@ namespace GymTEC_API.Controllers
         /// </summary>
         /// <param name="client_id">The ID of the client from which to retrieve all data.</param>
         /// <returns>A list of all client information given the specified ID.</returns>
-        /// <remarks>This method queries a database to retrieve employee.</remarks>
-
+        /// <remarks>This method queries a database to retrieve client.</remarks>
         [HttpPost("obt_client")]
         public async Task<ActionResult<JSON_Object>> ObtainClient(Client_IDENT client_id)
         { //Function for obtaining  branch info.

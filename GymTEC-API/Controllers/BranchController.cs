@@ -13,6 +13,12 @@ namespace GymTEC_API.Controllers
     {
 
 
+        /// <summary>
+        /// Method that returns a list with the name
+        /// of all branches found within the database.
+        /// </summary>
+        /// <returns>A List with the name of all branches.</returns>
+        /// <remarks>This method queries a database to retrieve branches.</remarks>
         [HttpGet("all_branches")]
         public async Task<ActionResult<JSON_Object>> AllBranches() { //Function for obtaining all branch names.
 
@@ -36,6 +42,13 @@ namespace GymTEC_API.Controllers
 
         }
 
+        /// <summary>
+        /// Method that returns a list with all the information 
+        /// of a branch given their Name.
+        /// </summary>
+        /// <param name="branch_name">The Name of the branch from which to retrieve all data.</param>
+        /// <returns>A list of all branch information given the specified Name.</returns>
+        /// <remarks>This method queries a database to retrieve branch.</remarks>
         [HttpPost("obt_branch")]
         public async Task<ActionResult<JSON_Object>> ObtainBranch( Branch_IDENT branch_name)
         { //Function for obtaining  branch info.
@@ -67,7 +80,12 @@ namespace GymTEC_API.Controllers
             }else { return BadRequest(); }
 
         }
-
+        /// <summary>
+        /// Method that adds a branch.
+        /// </summary>
+        /// <param name="branch_data">All branch information to add to the database.</param>
+        /// <returns>A confimation note or an error.</returns>
+        /// <remarks>This method queries a database to add branch.</remarks>
         [HttpPost("add_branch")]
         public async Task<ActionResult<JSON_Object>> AddBranch( Branch branch_data)
         {
@@ -88,7 +106,13 @@ namespace GymTEC_API.Controllers
 
             
         }
-        
+
+        /// <summary>
+        /// Method that deletes a branch given their Name.
+        /// </summary>
+        /// <param name="branch_data">The Name of the branch from which to delete all data.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to delete branch.</remarks>
         [HttpDelete("delete_branch")]
         public async Task<ActionResult<JSON_Object>> DeleteBranch(Branch_IDENT branch_data)
         {
@@ -108,6 +132,14 @@ namespace GymTEC_API.Controllers
             }
 
         }
+
+
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         [HttpPut("mod_branch")]
         public async Task<ActionResult<JSON_Object>> ModBranch(Branch branch_data)
         {

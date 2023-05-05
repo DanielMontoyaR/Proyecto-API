@@ -10,11 +10,77 @@ namespace GymTEC_API.Resources
     public class DBData
     {
         public static string cadenaConexion = "Data Source=DESKTOP-50TLTT3\\SQLEXPRESS;Initial Catalog=GymTec;User ID=Daniel;Password=123.";//This 
-        //Metodo que llama a un stored procedure en SQL para insertar un nuevo branch
+                                                                                                                                            //Metodo que llama a un stored procedure en SQL para insertar un nuevo branch
 
 
+
+        public static DataTable EmployeeLogin(Credentials Employee_ID)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                string query = string.Format("SELECT id, password FROM Employee WHERE id = '{0}' AND password = '{1}'", Employee_ID.ID_Credentials, Employee_ID.Password);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+
+
+        public static DataTable ClientLogin(Credentials client_credentials)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                string query = string.Format("SELECT client_id, password FROM Client WHERE client_id = '{0}' AND password = '{1}'", client_credentials.ID_Credentials, client_credentials.Password);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
 
         //Start Branch Functions
+
+        /// <summary>
+        /// Method that queries a database to get all branch names.
+        /// </summary>
+        /// <returns>A DataTable containing all specified information.</returns>
         public static DataTable GetAllBranches() { 
             SqlConnection connection = new SqlConnection(cadenaConexion);
 
@@ -42,6 +108,11 @@ namespace GymTEC_API.Resources
 
         }
 
+        /// <summary>
+        /// Method that queries a database to get all branch information.
+        /// </summary>
+        /// <param name="nombreBranch">The branch name that refers to the query.</param>
+        /// <returns>A database with all branch information.</returns>
         public static DataTable GetBranch(String nombreBranch)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -73,7 +144,12 @@ namespace GymTEC_API.Resources
         }
 
 
-
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteAddBranch(Branch json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -107,6 +183,12 @@ namespace GymTEC_API.Resources
             }
         }
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteDeleteBranch(Branch_IDENT json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -140,6 +222,12 @@ namespace GymTEC_API.Resources
             }
         }
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteModBranch(Branch json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -182,6 +270,11 @@ namespace GymTEC_API.Resources
 
 
         //Start Services Functions
+
+        /// <summary>
+        /// Method that queries a database to get all information from Services.
+        /// </summary>
+        /// <returns>A DataTable containing all specified information.</returns>
         public static DataTable GetAllServices()
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -211,7 +304,12 @@ namespace GymTEC_API.Resources
 
         }
 
-
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteAddService(Service json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -245,6 +343,12 @@ namespace GymTEC_API.Resources
             }
         }
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteDeleteService(Service_IDENT json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -283,6 +387,12 @@ namespace GymTEC_API.Resources
             }
         }
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteModService(Service json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -323,6 +433,10 @@ namespace GymTEC_API.Resources
 
         //Start Payroll Functions
 
+        /// <summary>
+        /// Method that queries a database to get all payroll information.
+        /// </summary>
+        /// <returns>A DataTable containing all specified information.</returns>
         public static DataTable GetAllPayrolls()
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -352,7 +466,12 @@ namespace GymTEC_API.Resources
 
         }
 
-
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteAddPayroll(Payroll json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -385,6 +504,13 @@ namespace GymTEC_API.Resources
                 connection.Close();
             }
         }
+
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteModPayroll(Payroll json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -423,6 +549,11 @@ namespace GymTEC_API.Resources
         //End Payroll Functions
 
         //Start Employee Functions
+
+        /// <summary>
+        /// Method that queries a database to get all Employee's first name, first last name and id.
+        /// </summary>
+        /// <returns>A DataTable containing all specified information.</returns>
         public static DataTable GetAllEmployees()
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -452,6 +583,12 @@ namespace GymTEC_API.Resources
 
         }
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static DataTable GetEmployee(String Employee_ID)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -482,6 +619,12 @@ namespace GymTEC_API.Resources
 
         }
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteAddEmployee(Employee json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -517,6 +660,12 @@ namespace GymTEC_API.Resources
             }
         }
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteDeleteEmployee(Employee_IDENT json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -551,6 +700,12 @@ namespace GymTEC_API.Resources
             }
         }
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteModEmployee(Employee json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -597,6 +752,11 @@ namespace GymTEC_API.Resources
         //End Employee Functions
 
         //Start Product Functions
+
+        /// <summary>
+        /// Method that queries a database to get all product's information.
+        /// </summary>
+        /// <returns>A DataTable containing all specified information.</returns>
         public static DataTable GetAllProducts()
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -626,6 +786,12 @@ namespace GymTEC_API.Resources
 
         }
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static DataTable GetProduct(String Barcode)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -656,6 +822,12 @@ namespace GymTEC_API.Resources
 
         }
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteAddProduct(Product json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -690,6 +862,12 @@ namespace GymTEC_API.Resources
             }
         }
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteDeleteProduct(Product_IDENT json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -724,6 +902,12 @@ namespace GymTEC_API.Resources
             }
         }
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteModProduct(Product json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -761,6 +945,13 @@ namespace GymTEC_API.Resources
 
 
         //Start Client Functions
+
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteAddClient(Client json) {
 
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -795,6 +986,11 @@ namespace GymTEC_API.Resources
 
 
         }
+
+        /// <summary>
+        /// Method that queries a database to get Client's First name, first last name and id.
+        /// </summary>
+        /// <returns>A DataTable containing all specified information.</returns>
         public static DataTable GetAllClients()
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -824,6 +1020,12 @@ namespace GymTEC_API.Resources
 
         }
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static DataTable GetClient(String id_client)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -854,7 +1056,12 @@ namespace GymTEC_API.Resources
 
         }
 
-
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteDeleteClient(Client_IDENT json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -889,6 +1096,12 @@ namespace GymTEC_API.Resources
             }
         }
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteModClient(Client json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -926,6 +1139,11 @@ namespace GymTEC_API.Resources
 
 
         //******************Gear**********************
+
+        /// <summary>
+        /// Method that queries a database to get all Gear's name and type.
+        /// </summary>
+        /// <returns>A DataTable containing all specified information.</returns>
         public static DataTable GetAllGears()
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -957,7 +1175,12 @@ namespace GymTEC_API.Resources
 
         }
 
-
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static DataTable GetGear(int idGear)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -992,6 +1215,12 @@ namespace GymTEC_API.Resources
 
         }
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteAddGear(GearOBT json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -1027,6 +1256,12 @@ namespace GymTEC_API.Resources
             }
         }
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteModGear(GearOBT json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -1065,6 +1300,12 @@ namespace GymTEC_API.Resources
         }
 
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteDeleteGear(GearAvailable_IDENT json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -1103,6 +1344,11 @@ namespace GymTEC_API.Resources
         //********Inventory***************
 
         //Get all inventories
+
+        /// <summary>
+        /// Method that queries a database to get all Inventory's brand, serial number, name and Gear's name and type.
+        /// </summary>
+        /// <returns>A DataTable containing all specified information.</returns>
         public static DataTable GetAllInventory()
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -1136,6 +1382,13 @@ namespace GymTEC_API.Resources
         }
 
         //Get inventory
+
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static DataTable GetInventory(int idInventory) //continuar este
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -1172,6 +1425,13 @@ namespace GymTEC_API.Resources
 
 
         //Add inventory
+
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteAddInventory(Inventory json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -1204,6 +1464,13 @@ namespace GymTEC_API.Resources
                 connection.Close();
             }
         }
+
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteModInventory(Inventory_ALL json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -1238,6 +1505,12 @@ namespace GymTEC_API.Resources
             }
         }
 
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteDeleteInventory(Inventory_IDENT json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -1272,6 +1545,13 @@ namespace GymTEC_API.Resources
         }
         //********************Clases***********************8
         //Add lesson
+
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteAddLesson(Lesson json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -1304,6 +1584,11 @@ namespace GymTEC_API.Resources
                 connection.Close();
             }
         }
+
+        /// <summary>
+        /// Method that queries a database to get all Lesson's id, name, instructor id, service id and quotas.
+        /// </summary>
+        /// <returns>A DataTable containing all specified information.</returns>
         public static DataTable GetAllClasses()
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -1333,6 +1618,13 @@ namespace GymTEC_API.Resources
 
         }
         //Get class for admin
+
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static DataTable GetClass(int idLesson)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
@@ -1367,6 +1659,13 @@ namespace GymTEC_API.Resources
 
         }
         //Enroll lesson
+
+        /// <summary>
+        /// Method that modifies a branch given their information.
+        /// </summary>
+        /// <param name="branch_data">The information of the branch from which to modify their existing info.</param>
+        /// <returns>A confirmation note or an error.</returns>
+        /// <remarks>This method queries a database to modify branch.</remarks>
         public static bool ExecuteEnrollLesson(Client_Lessons json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
