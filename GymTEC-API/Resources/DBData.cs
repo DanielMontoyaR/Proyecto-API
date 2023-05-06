@@ -1675,10 +1675,85 @@ namespace GymTEC_API.Resources
             {
                 connection.Close();
             }
-    }
+        }
 
 
         /****************************/
+
+
+        //Start Shop Functions
+        /// <summary>
+        /// Method that queries a database to get all shops.
+        /// </summary>
+        /// <returns>A DataTable containing all shop information.</returns>
+        public static DataTable GetAllShop()
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Shop", connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+
+        /// <summary>
+        /// Method that that queries a database to modify a shop given their information.
+        /// </summary>
+        /// <param name="json">The information of the shop to modify.</param>
+        /// <returns>A boolean value indicating whether the modfication was successful.</returns>
+        public static bool ExecuteModShop(Shop json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+                //llamada al stored procedure 
+                string query = string.Format("UPDATE Shop " +
+                    "SET status = '{0}' WHERE branch_name = '{1}'", json.Status, json.Branch_Name);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        //End Shop Functions
 
 
     }
