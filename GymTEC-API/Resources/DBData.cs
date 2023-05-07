@@ -169,7 +169,11 @@ namespace GymTEC_API.Resources
                 connection.Open();
                 //llamada al stored procedure 
                 string query = string.Format("INSERT INTO Branch(province,district,canton,branch_name,max_capacity,openDate,branch_schedule)" +
-                                                "VALUES ('{0}', '{1}', '{2}', '{3}', {4}, '{5}', '{6}')", json.Province, json.District, json.Canton, json.Name, json.max_Size, json.opening_Date, json.schedule_Attention);
+                                             "VALUES ('{0}', '{1}', '{2}', '{3}', {4}, '{5}', '{6}') " +
+                                             "INSERT INTO Spa(branch_name, status) " +
+                                             "VALUES ('{3}', '0')" +
+                                             "INSERT INTO Shop(branch_name, status) " +
+                                             "VALUES ('{3}', '0')", json.Province, json.District, json.Canton, json.Name, json.max_Size, json.opening_Date, json.schedule_Attention);
                 Console.WriteLine(query);
                 SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.CommandType = System.Data.CommandType.Text;
@@ -205,8 +209,12 @@ namespace GymTEC_API.Resources
             try
             {
                 connection.Open();
-                string query = string.Format("DELETE FROM Branch " +
-                                                "WHERE branch_name = '{0}'", json.Name);
+                string query = string.Format("DELETE FROM Spa " +
+                                             "WHERE branch_name = '{0}' " +
+                                             "DELETE FROM Shop " +
+                                             "WHERE branch_name = '{0}' " +
+                                             "DELETE FROM Branch " +
+                                             "WHERE branch_name = '{0}' ", json.Name);
 
                 Console.WriteLine(query);
                 SqlCommand cmd = new SqlCommand(query, connection);
@@ -1752,6 +1760,47 @@ namespace GymTEC_API.Resources
                 connection.Close();
             }
         }
+
+        /// <summary>
+        /// Method that queries a database to get shop's products.
+        /// </summary>
+        /// <param name="name">The branch name of the shop to obtain its products.</param>
+        /// <returns>A DataTable containing all shop's products information (Branch name, barcode, product's name, description and price).</returns>
+        public static DataTable GetShopProduct(string name)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                String query = string.Format("SELECT Shop.branch_name, Product.barcode, Product.name, Product.description, Product.price " +
+                                             "FROM Shop " +
+                                             "INNER JOIN Product ON Product.branch_name = Shop.branch_name " +
+                                             "WHERE Shop.branch_name = '{0}'", name);
+
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+
+
 
         //End Shop Functions
 

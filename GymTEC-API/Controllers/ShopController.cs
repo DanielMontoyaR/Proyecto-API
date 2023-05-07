@@ -79,5 +79,43 @@ namespace GymTEC_API.Controllers
 
 
         }
+
+        /// <summary>
+        /// Method that returns a list with all the products 
+        /// of a shop given their branch name.
+        /// </summary>
+        /// <param name="Product_Branch_Name">The branch name of the shop from which to retrieve all data.</param>
+        /// <returns>A list of all products given the specified branch name.</returns>
+        /// <remarks>This method queries a database to retrieve shop's products.</remarks>
+        [HttpPost("obt_shop_product")]
+        public async Task<ActionResult<JSON_Object>> ObtainShopProduct(Branch_IDENT Product_Branch_Name)
+        { //Function for obtaining  branch info.
+
+
+            DataTable allBranchProduct = DBData.GetShopProduct(Product_Branch_Name.Name);
+
+
+            List<Product> Product_L = new List<Product>();
+
+
+
+            foreach (DataRow row in allBranchProduct.Rows)
+            {
+                Product product = new Product();
+                product.Barcode = row["barcode"].ToString();
+                product.Name = row["name"].ToString();
+                product.Description = row["description"].ToString();
+                product.price = Convert.ToInt32(row["price"]);
+                product.branch_Name = row["branch_name"].ToString();
+
+                Product_L.Add(product);
+            }
+
+            JSON_Object json = new JSON_Object("ok", Product_L);
+            return Ok(json);
+
+        }
+
+
     }
 }
