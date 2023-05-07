@@ -1805,5 +1805,121 @@ namespace GymTEC_API.Resources
         //End Shop Functions
 
 
+        //Start of Spa Functions
+        /// <summary>
+        /// Method that queries a database to get all spas.
+        /// </summary>
+        /// <returns>A DataTable containing all spas information.</returns>
+        public static DataTable GetAllSpas()
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Spa", connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+
+        /// <summary>
+        /// Method that that queries a database to modify a spa given their information.
+        /// </summary>
+        /// <param name="json">The information of the spa to modify.</param>
+        /// <returns>A boolean value indicating whether the modfication was successful.</returns>
+        public static bool ExecuteModSpa(Spa json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+                //llamada al stored procedure 
+                string query = string.Format("UPDATE Spa " +
+                    "SET status = '{0}' WHERE branch_name = '{1}'", json.Status, json.Branch_Name);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        /// <summary>
+        /// Method that queries a database to get spa's treatments.
+        /// </summary>
+        /// <param branch_name="branch_name">The branch name of the spa to obtain its treatments.</param>
+        /// <returns>A DataTable containing all spa's treatments information (branch_name, treatment_description).</returns>
+        public static DataTable GetSpaTreatment(string branch_name) //TERMINAR ESTO
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                String query = string.Format("SELECT Spa.branch_name , Treatment.treatment_description \r\n " +
+                    "FROM Spa_Treatment  \r\n " +
+                    "INNER JOIN Spa ON Spa.branch_name = Spa_Treatment.branch_name \r\n " +
+                    "INNER JOIN Treatment ON Treatment.treatment_id = Spa_Treatment.treat_id " +
+                    "WHERE Spa_Treatment.branch_name = '{0}' ", branch_name);
+
+                //Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+        //End of spa functions
+
+
+
     }
 }
