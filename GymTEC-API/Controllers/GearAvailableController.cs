@@ -23,6 +23,7 @@ namespace GymTEC_API.Controllers
                 
                 gearINNER.Name = row["name"].ToString();
                 gearINNER.Gear_Type = row["gear_type"].ToString();
+                gearINNER.Gear_ID = Convert.ToInt32(row["gear_id"]);
 
                 gear_L.Add(gearINNER);
 

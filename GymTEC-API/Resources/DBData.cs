@@ -9,9 +9,6 @@ namespace GymTEC_API.Resources
 {
     public class DBData
     {
-        public static string cadenaConexion = "Data Source=DESKTOP-50TLTT3\\SQLEXPRESS;Initial Catalog=GymTec;User ID=Daniel;Password=123.";//This 
-                                                                                                                                            //Metodo que llama a un stored procedure en SQL para insertar un nuevo branch
-
 
         /// <summary>
         /// Method that queries the database to retrieve the id and password of the employee entity.
@@ -1148,7 +1145,7 @@ namespace GymTEC_API.Resources
             try
             {
                 connection.Open();
-                SqlCommand cmd = new SqlCommand("SELECT Gear_avalible.name, Gear_type.gear_type\r\n" +
+                SqlCommand cmd = new SqlCommand("SELECT Gear_avalible.name, Gear_type.gear_type, Gear_avalible.gear_id \r\n" +
                     "FROM Gear_avalible\r\n" +
                     "INNER JOIN Gear_type ON Gear_type.gear_id = Gear_avalible.gear_id ", connection);
                 cmd.CommandType = System.Data.CommandType.Text;
@@ -1918,6 +1915,121 @@ namespace GymTEC_API.Resources
 
         }
         //End of spa functions
+
+
+        //Start of Workstation
+        /// <summary>
+        /// Method that queries a database to get all Employee's first name, first last name and id.
+        /// </summary>
+        /// <returns>A DataTable containing all specified information.</returns>
+        public static DataTable GetAllJobs()
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                SqlCommand cmd = new SqlCommand("SELECT Workstation.wks_id , Workstation.role, Workstation.description, Employee.id  " +
+                    "FROM Workstation " +
+                    "INNER JOIN Employee ON Employee.Workstaion_id = Workstation.wks_id ", connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+
+        /// <summary>
+        /// Method that queries a database to get all the information of a specific employee.
+        /// </summary>
+        /// <param name="Employee_ID">The employee identifier that refers to the query.</param>
+        /// <returns>A database with all specified information.</returns>
+        public static DataTable GetJob(String Employee_ID)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+            try
+            {
+                connection.Open();
+                string query = string.Format("SELECT Workstation.wks_id , Workstation.role, Workstation.description\r\n " +
+                    "FROM Workstation\r\n " +
+                    "INNER JOIN Employee ON Employee.Workstaion_id = Workstation.wks_id \r\n " +
+                    "WHERE Employee.id = {0}", Employee_ID);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+
+            }
+
+            finally { connection.Close(); }
+
+        }
+
+
+        /// <summary>
+        /// Method that that queries a database to modify an employee given their information.
+        /// </summary>
+        /// <param name="json">The information of the employee to modify.</param>
+        /// <returns>A boolean value indicating whether the modfication was successful.</returns>
+        public static bool ExecuteModJob(EmployeeJOB json)
+        {
+            SqlConnection connection = new SqlConnection(cadenaConexion);
+
+
+            try
+            {
+                connection.Open();
+                //llamada al stored procedure 
+                string query = string.Format("UPDATE Employee " +
+                                             "SET Workstaion_id = '{1}' " +
+                                             "WHERE id = '{0}';", json.Employee_ID, json.Employee_Workstation_id);
+                Console.WriteLine(query);
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.CommandType = System.Data.CommandType.Text;
+
+
+                int i = cmd.ExecuteNonQuery();
+
+                return (i > 0) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+        //End of Workstation
 
 
 
