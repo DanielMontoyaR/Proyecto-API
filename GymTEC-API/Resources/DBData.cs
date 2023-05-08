@@ -10,6 +10,8 @@ namespace GymTEC_API.Resources
     public class DBData
     {
 
+        public static string cadenaConexion = "Data Source=DESKTOP-50TLTT3\\SQLEXPRESS;Initial Catalog=GymTec;User ID=Daniel;Password=123.";//This
+
         /// <summary>
         /// Method that queries the database to retrieve the id and password of the employee entity.
         /// </summary>
@@ -453,7 +455,9 @@ namespace GymTEC_API.Resources
             try
             {
                 connection.Open();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Form", connection);
+                SqlCommand cmd = new SqlCommand("SELECT Form.form_id , Form.typepayment, Form.description, Employee.id  " +
+                                                "FROM Form " +
+                                                "INNER JOIN Employee ON Employee.form_id = Form.form_id ", connection);
                 cmd.CommandType = System.Data.CommandType.Text;
 
                 DataTable dataTable = new DataTable();
@@ -476,49 +480,52 @@ namespace GymTEC_API.Resources
         }
 
         /// <summary>
-        /// Method that queries a database to insert the information of a new payroll.
+        /// Method that queries a database to get all the information of a specific employee.
         /// </summary>
-        /// <param name="json">The payroll information to insert.</param>
-        /// <returns>A boolean value indicating whether the insert was successful.</returns>
-        public static bool ExecuteAddPayroll(Payroll json)
+        /// <param name="Employee_ID">The employee identifier that refers to the query.</param>
+        /// <returns>A database with all specified information.</returns>
+        public static DataTable GetPayroll(String Employee_ID)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
-
 
             try
             {
                 connection.Open();
-                //llamada al stored procedure 
-                string query = string.Format("INSERT INTO Form(id,typepayment,description)" +
-                                                "VALUES ('{0}', '{1}', '{2}')", json.ID_Payroll, json.Payroll_Type, json.Description);
-                Console.WriteLine(query);
+                string query = string.Format("SELECT Form.form_id , Form.typepayment, Form.description\r\n " +
+                    "FROM Form\r\n " +
+                    "INNER JOIN Employee ON Employee.form_id = Form.form_id \r\n " +
+                    "WHERE Employee.id = {0}", Employee_ID);
                 SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.CommandType = System.Data.CommandType.Text;
 
+                DataTable dataTable = new DataTable();
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
 
-
-                int i = cmd.ExecuteNonQuery();
-
-                return (i > 0) ? true : false;
+                sqlDataAdapter.Fill(dataTable);
+                return dataTable;
 
             }
+
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return false;
+                return null;
+
             }
-            finally
-            {
-                connection.Close();
-            }
+
+            finally { connection.Close(); }
+
         }
+
+
+
 
         /// <summary>
         /// Method that that queries a database to modify a payroll given their information.
         /// </summary>
         /// <param name="json">The information of the payroll to modify.</param>
         /// <returns>A boolean value indicating whether the modfication was successful.</returns>
-        public static bool ExecuteModPayroll(Payroll json)
+        public static bool ExecuteModPayroll(EmployeePAYROLL json)
         {
             SqlConnection connection = new SqlConnection(cadenaConexion);
 
@@ -527,9 +534,10 @@ namespace GymTEC_API.Resources
             {
                 connection.Open();
                 //llamada al stored procedure 
-                string query = string.Format("UPDATE Form " +
-                                             "SET typepayment = '{1}', description = '{2}' " +
-                                             "WHERE id = '{0}';", json.ID_Payroll, json.Payroll_Type, json.Description);
+                string query = string.Format("UPDATE Employee " +
+                                             "SET form_id = '{1}' " +
+                                             "WHERE id = '{0}';", json.Employee_ID, json.Employee_Payroll_id);
+
                 Console.WriteLine(query);
                 SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.CommandType = System.Data.CommandType.Text;

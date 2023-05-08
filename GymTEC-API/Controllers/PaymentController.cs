@@ -29,10 +29,10 @@ namespace GymTEC_API.Controllers
             foreach (DataRow row in allPayroll.Rows)
             {
                 Payroll payroll = new Payroll();
-                payroll.ID_Payroll = Convert.ToInt32(row["id"]);
+                payroll.ID_Payroll = Convert.ToInt32(row["Form_id"]);
                 payroll.Description = row["description"].ToString();
                 payroll.Payroll_Type = row["typepayment"].ToString();
-
+                payroll.Employee_ID = row["id"].ToString();
                 Services_L.Add(payroll);
             }
 
@@ -41,30 +41,38 @@ namespace GymTEC_API.Controllers
 
 
         }
-
         /// <summary>
-        /// Method that adds a payroll.
+        /// Method that returns a list with all the information 
+        /// of an employee given their ID.
         /// </summary>
-        /// <param name="payroll_data">All payroll information to add to the database.</param>
-        /// <returns>A confimation note or an error.</returns>
-        /// <remarks>This method queries a database to delete employee.</remarks>
-        [HttpPost("add_payroll")]
-        public async Task<ActionResult<JSON_Object>> AddPayroll(Payroll payroll_data)
-        {
-            JSON_Object json = new JSON_Object("error", null); //An error and null are initialized in order to verify any error.
+        /// <param name="Employee_ID">The ID of the employee from which to retrieve all data.</param>
+        /// <returns>A list of all employee information given the specified ID.</returns>
+        /// <remarks>This method queries a database to retrieve employee.</remarks>
 
-            bool var = DBData.ExecuteAddPayroll(payroll_data);
-            Console.WriteLine(var);
-            if (var)
+        [HttpPost("obt_payroll")]
+        public async Task<ActionResult<JSON_Object>> ObtainPayroll(Employee_IDENT Employee_ID)
+        { //Function for obtaining  branch info.
+
+
+            DataTable allPayroll = DBData.GetPayroll(Employee_ID.Employee_ID);
+
+            Payroll payroll = new Payroll();
+
+
+            if (allPayroll != null)
             {
-                json.status = "ok";
+                foreach (DataRow row in allPayroll.Rows)
+                {
+                    payroll.ID_Payroll = Convert.ToInt32(row["form_id"]);
+                    payroll.Payroll_Type = row["typepayment"].ToString();
+                    payroll.Description = row["description"].ToString();
+
+                }
+
+                JSON_Object json = new JSON_Object("ok", payroll);
                 return Ok(json);
             }
-            else
-            {
-
-                return BadRequest(json);
-            }
+            else { return BadRequest(); }
 
         }
 
@@ -75,7 +83,7 @@ namespace GymTEC_API.Controllers
         /// <returns>A confirmation note or an error.</returns>
         /// <remarks>This method queries a database to delete employee.</remarks>
         [HttpPut("mod_payroll")]
-        public async Task<ActionResult<JSON_Object>> ModPayroll(Payroll payroll_data)
+        public async Task<ActionResult<JSON_Object>> ModPayroll(EmployeePAYROLL payroll_data)
         {
             JSON_Object json = new JSON_Object("error", null); //An error and null are initialized in order to verify any error.
 
