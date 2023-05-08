@@ -480,9 +480,9 @@ namespace GymTEC_API.Resources
         }
 
         /// <summary>
-        /// Method that queries a database to get all the information of a specific employee.
+        /// Method that queries a database to get all the information of a specific payroll.
         /// </summary>
-        /// <param name="Employee_ID">The employee identifier that refers to the query.</param>
+        /// <param name="Employee_ID">The payroll identifier that refers to the query.</param>
         /// <returns>A database with all specified information.</returns>
         public static DataTable GetPayroll(String Employee_ID)
         {
