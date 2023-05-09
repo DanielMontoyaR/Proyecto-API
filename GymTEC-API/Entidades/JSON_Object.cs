@@ -1,6 +1,6 @@
 ﻿namespace GymTEC_API.Entidades
 {      
-    //Modelo que permite crear un JSON para enviar al web app y que sea interpretado por los developers encargados del web app
+    //Model that allows to create a JSON to send information to the web app and then it can be read for the web app developers
     public class JSON_Object
     {
         public string status { get; set; } = string.Empty;

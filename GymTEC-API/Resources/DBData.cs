@@ -10,7 +10,8 @@ namespace GymTEC_API.Resources
     public class DBData
     {
 
-        public static string cadenaConexion = "Data Source=DESKTOP-50TLTT3\\SQLEXPRESS;Initial Catalog=GymTec;User ID=Daniel;Password=123.";//This
+        public static string cadenaConexion = "Data Source=LAPTOP-85GS8ERK;Initial Catalog=GymTec;Persist Security Info=True;User ID=maxgm;Password=123";//This 
+        //Metodo que llama a un stored procedure en SQL para insertar un nuevo branch
 
         /// <summary>
         /// Method that queries the database to retrieve the id and password of the employee entity.

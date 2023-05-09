@@ -2,6 +2,6 @@
 {
     public class Service_IDENT
     {
-        public string ID_Service { get; set; } = string.Empty; //Key Value of Service
+        public string ID_Service { get; set; } = string.Empty; //PK
     }
 }

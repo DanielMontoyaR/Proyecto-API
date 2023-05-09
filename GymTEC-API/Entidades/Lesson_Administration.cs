@@ -4,7 +4,7 @@
     {
         public int ID_Lessons { get; set; } = 0;
         public string Branch_Name { get; set; } = string.Empty;
-        public int Quotas { get; set; } = 0; //Cupos para el curso
+        public int Quotas { get; set; } = 0; //Cupos 
         public string Start_Date { get; set; }
         public string Final_Date { get; set; }
         public string instructor_id { get; set; } = string.Empty;

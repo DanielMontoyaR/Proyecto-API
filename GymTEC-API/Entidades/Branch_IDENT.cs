@@ -2,6 +2,6 @@
 {
     public class Branch_IDENT
     {
-        public string Name { get; set; } = string.Empty; //Atributo llave de la entidad Sucursal
+        public string Name { get; set; } = string.Empty; // PK/Identification of Branch
     }
 }

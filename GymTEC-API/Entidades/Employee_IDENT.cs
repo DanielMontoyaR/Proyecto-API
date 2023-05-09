@@ -2,6 +2,6 @@
 {
     public class Employee_IDENT
     {
-        public string Employee_ID { get; set; } = string.Empty; //Key Value of Service
+        public string Employee_ID { get; set; } = string.Empty; //Key Value of Employee
     }
 }
